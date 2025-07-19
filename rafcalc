@@ -1,0 +1,46 @@
+#!/usr/bin/env python3 
+"""rafcalc
+Rafmartom simple calculator
+This doctstring is parsed multiline so
+No worries about using more lines
+"""
+import argparse
+
+
+# ./rafcalc --help
+# ./rafcalc addition --help
+# ./rafcalc addition -a 20 -b 5
+
+def perform_addition(arg_a, arg_b):
+    """Adds two numbers together.Be careful it parses all in one-line, so dont add more."""
+    print(arg_a + arg_b)
+
+def perform_substraction(arg_a, arg_b):
+    """Subtracts the second number from the first."""
+    print(arg_a - arg_b)
+
+parser = argparse.ArgumentParser(
+    prog = 'rafcalc',
+    description=__doc__,
+    formatter_class=argparse.RawDescriptionHelpFormatter
+)
+
+subparsers = parser.add_subparsers(dest="operation", help="Available operations", required=True)
+
+# Use function docstring as subcommand help
+add_parser = subparsers.add_parser("addition", help=perform_addition.__doc__, description=perform_addition.__doc__ )
+add_parser.add_argument("-a", type=int, required=True, help="First number")
+add_parser.add_argument("-b", type=int, required=True, help="Second number")
+
+sub_parser = subparsers.add_parser("substraction", help=perform_substraction.__doc__, description=perform_substraction.__doc__)
+sub_parser.add_argument("-a", type=int, required=True, help="First number")
+sub_parser.add_argument("-b", type=int, required=True, help="Second number")
+
+args = parser.parse_args()
+
+match args.operation:
+    case "addition":
+        perform_addition(args.a, args.b)
+    case "substraction":
+        perform_substraction(args.a, args.b)
+
